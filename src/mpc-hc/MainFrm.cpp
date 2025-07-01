@@ -12366,8 +12366,18 @@ void CMainFrame::MoveVideoWindow(bool fShowStats/* = false*/, bool bSetStoppedVi
 
             // Position video frame
             // left and top parts are allowed to be negative
-            videoRect.left = lround((dWRWidth - dScaledVRWidth) / 2 * (m_PosX + 0.5));
-            videoRect.top  = lround((dWRHeight - dScaledVRHeight) / 2 * (m_PosY + 0.5));
+            // PnS frame adjust:
+            // if you like move video frame - leave code as is
+            // if you prefer move viewable rect - just change if-else condition code (or '<' signs to '>' signs)
+            if (dScaledVRWidth < dWRWidth)
+                videoRect.left = lround((dWRWidth - dScaledVRWidth) / 2 * (0.5 + m_PosX));
+            else
+                videoRect.left = lround((dWRWidth - dScaledVRWidth) / 2 * (1.5 - m_PosX));
+            if (dScaledVRHeight < dWRHeight)
+                videoRect.top = lround((dWRHeight - dScaledVRHeight) / 2 * (0.5 + m_PosY));
+            else
+                videoRect.top = lround((dWRHeight - dScaledVRHeight) / 2 * (1.5 - m_PosY));
+
             // right and bottom parts are always at picture center or beyond, so never negative
             videoRect.right  = lround(videoRect.left + dScaledVRWidth);
             videoRect.bottom = lround(videoRect.top  + dScaledVRHeight);
